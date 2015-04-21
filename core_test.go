@@ -16,22 +16,22 @@ type Item struct{}
 func (item Item) Get(request *http.Request) (int, interface{}, http.Header) {
 	items := []string{"item1", "item2"}
 	data := map[string][]string{"items": items}
-	return 200, data, nil
+	return http.StatusOK, data, nil
 }
 
 func (item Item) Post(request *http.Request) (int, interface{}, http.Header) {
 	data := fmt.Sprintf("You sent: %s", request.Form.Get("hello"))
-	return 200, data, http.Header{"Content-Type": {"text/plain"}}
+	return http.StatusOK, data, http.Header{"Content-Type": {"text/plain"}}
 }
 
 type Upload struct{}
 
 func (upload Upload) Post(request *http.Request) (int, interface{}, http.Header) {
 	if err := request.ParseMultipartForm(1024); err != nil {
-		return 500, err.Error(), http.Header{"Content-Type": {"text/plain"}}
+		return http.StatusBadRequest, err.Error(), http.Header{"Content-Type": {"text/plain"}}
 	}
 	data := request.MultipartForm.Value["title"]
-	return 200, data, nil
+	return http.StatusOK, data, nil
 }
 
 func TestMain(m *testing.M) {
