@@ -2,7 +2,7 @@
 
 #### A tiny REST framework for Go
 
-Sloth is a micro-framework for building RESTful APIs. It was forked from (Sleepy)[https://github.com/dougblack/sleepy] to support the (Gorilla web toolkit)[http://www.gorillatoolkit.org/pkg/mux].
+Sloth is a micro-framework for building RESTful APIs. It was forked from [Sleepy](https://github.com/dougblack/sleepy) to support the [Gorilla web toolkit](http://www.gorillatoolkit.org/pkg/mux).
 
 ```go
 package main
@@ -42,4 +42,4 @@ Documentation lives [here](http://godoc.org/github.com/strukturag/sloth).
 
 ## License
 
-`sloth` is released under the [MIT License](http://opensource.org/licenses/MIT).
+`Sloth` is released under the [MIT License](http://opensource.org/licenses/MIT).
