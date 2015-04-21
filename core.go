@@ -121,7 +121,7 @@ func (api *API) requestHandler(resource interface{}) http.HandlerFunc {
 		default:
 			// Encode JSON.
 			content, err = json.MarshalIndent(data, "", "  ")
-			if err != nil {
+			if err == nil {
 				if header == nil {
 					header = http.Header{"Content-Type": {"application/json"}}
 				} else if header.Get("Content-Type") == "" {
