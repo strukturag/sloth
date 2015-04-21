@@ -8,15 +8,6 @@ import (
 	"net/http"
 )
 
-const (
-	GET    = "GET"
-	POST   = "POST"
-	PUT    = "PUT"
-	DELETE = "DELETE"
-	HEAD   = "HEAD"
-	PATCH  = "PATCH"
-)
-
 // GetSupported is the interface that provides the Get
 // method a resource must support to receive HTTP GETs.
 type GetSupported interface {
@@ -53,7 +44,7 @@ type PatchSupported interface {
 	Patch(*http.Request) (int, interface{}, http.Header)
 }
 
-// Interface for arbitrary muxer support (like http.ServeMux).
+// APIMux interface for arbitrary muxer support (like http.ServeMux).
 type APIMux interface {
 	HandleFunc(pattern string, handler func(http.ResponseWriter, *http.Request)) *mux.Route
 	ServeHTTP(w http.ResponseWriter, r *http.Request)
@@ -86,27 +77,27 @@ func (api *API) requestHandler(resource interface{}) http.HandlerFunc {
 		var handler func(*http.Request) (int, interface{}, http.Header)
 
 		switch request.Method {
-		case GET:
+		case "GET":
 			if resource, ok := resource.(GetSupported); ok {
 				handler = resource.Get
 			}
-		case POST:
+		case "POST":
 			if resource, ok := resource.(PostSupported); ok {
 				handler = resource.Post
 			}
-		case PUT:
+		case "PUT":
 			if resource, ok := resource.(PutSupported); ok {
 				handler = resource.Put
 			}
-		case DELETE:
+		case "DELETE":
 			if resource, ok := resource.(DeleteSupported); ok {
 				handler = resource.Delete
 			}
-		case HEAD:
+		case "HEAD":
 			if resource, ok := resource.(HeadSupported); ok {
 				handler = resource.Head
 			}
-		case PATCH:
+		case "PATCH":
 			if resource, ok := resource.(PatchSupported); ok {
 				handler = resource.Patch
 			}
@@ -158,11 +149,10 @@ func (api *API) requestHandler(resource interface{}) http.HandlerFunc {
 func (api *API) Mux() APIMux {
 	if api.muxInitialized {
 		return api.mux
-	} else {
-		api.mux = mux.NewRouter()
-		api.muxInitialized = true
-		return api.mux
 	}
+	api.mux = mux.NewRouter()
+	api.muxInitialized = true
+	return api.mux
 }
 
 // SetMux sets the muxer to use by an API. A muxer needs to
@@ -170,11 +160,10 @@ func (api *API) Mux() APIMux {
 func (api *API) SetMux(mux APIMux) error {
 	if api.muxInitialized {
 		return errors.New("You cannot set a muxer when already initialized.")
-	} else {
-		api.mux = mux
-		api.muxInitialized = true
-		return nil
 	}
+	api.mux = mux
+	api.muxInitialized = true
+	return nil
 }
 
 // AddResource adds a new resource to an API. The API will route
