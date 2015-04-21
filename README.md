@@ -4,6 +4,8 @@
 
 Sloth is a micro-framework for building RESTful APIs. It was forked from [Sleepy](https://github.com/dougblack/sleepy) to support the [Gorilla web toolkit](http://www.gorillatoolkit.org/pkg/mux).
 
+[![Build Status](https://travis-ci.org/strukturag/sloth.png?branch=master)](https://travis-ci.org/strukturag/sloth)
+
 ```go
 package main
 
