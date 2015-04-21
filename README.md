@@ -1,19 +1,18 @@
-## Sleepy
+## Sloth
 
-#### A RESTful framework for Go
+#### A tiny REST framework for Go
 
-Sleepy is a micro-framework for building RESTful APIs.
+Sloth is a micro-framework for building RESTful APIs. It was forked from (Sleepy)[https://github.com/dougblack/sleepy] to support the (Gorilla web toolkit)[http://www.gorillatoolkit.org/pkg/mux].
 
 ```go
 package main
 
 import (
-    "net/url"
     "net/http"
-    "github.com/dougblack/sleepy"
+    "github.com/strukturag/sloth"
 )
 
-type Item struct { }
+type Item struct {}
 
 func (item Item) Get(request *http.Request) (int, interface{}, http.Header) {
     items := []string{"item1", "item2"}
@@ -24,7 +23,7 @@ func (item Item) Get(request *http.Request) (int, interface{}, http.Header) {
 func main() {
     item := new(Item)
 
-    api := sleepy.NewAPI()
+    api := sloth.NewAPI()
     api.AddResource(item, "/items")
     api.Start(3000)
 }
@@ -37,13 +36,10 @@ $ curl localhost:3000/items
 {"items": ["item1", "item2"]}
 ```
 
-`sleepy` has not been officially released yet, as it is still in active
-development.
-
 ## Docs
 
-Documentation lives [here](http://godoc.org/github.com/dougblack/sleepy).
+Documentation lives [here](http://godoc.org/github.com/strukturag/sloth).
 
 ## License
 
-`sleepy` is released under the [MIT License](http://opensource.org/licenses/MIT).
+`sloth` is released under the [MIT License](http://opensource.org/licenses/MIT).

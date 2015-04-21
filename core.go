@@ -1,4 +1,4 @@
-package sleepy
+package sloth
 
 import (
 	"encoding/json"

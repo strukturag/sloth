@@ -1,4 +1,4 @@
-package sleepy
+package sloth
 
 import (
 	"fmt"
@@ -45,7 +45,7 @@ func TestBasicPostWithTextPlainResponse(t *testing.T) {
 	var api = NewAPI()
 	api.AddResource(item, "/items", "/bar", "/baz")
 	go api.Start(3000)
-	resp, err := http.PostForm("http://localhost:3000/items", url.Values{"hello": {"sleepy"}})
+	resp, err := http.PostForm("http://localhost:3000/items", url.Values{"hello": {"sloth"}})
 	if err != nil {
 		t.Error(err)
 	}
@@ -53,7 +53,7 @@ func TestBasicPostWithTextPlainResponse(t *testing.T) {
 		t.Error("Content-Type wrong.")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
-	if string(body) != "You sent: sleepy" {
+	if string(body) != "You sent: sloth" {
 		t.Error("Not equal.")
 	}
 
