@@ -1,4 +1,2 @@
-all:
-
 test:
 	go test .
