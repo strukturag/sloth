@@ -33,7 +33,12 @@ Now if we curl that endpoint:
 
 ```bash
 $ curl localhost:3000/items
-{"items": ["item1", "item2"]}
+{
+  "items": [
+    "item1",
+    "item2"
+  ]
+}
 ```
 
 ## Docs
