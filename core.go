@@ -57,19 +57,21 @@ type APIMux interface {
 // You can instantiate multiple APIs on separate ports. Each API
 // will manage its own set of resources.
 type API struct {
-	mux            APIMux
-	muxInitialized bool
+	mux                APIMux
+	muxInitialized     bool
+	defaultParseForm   bool
+	defaultContentType string
 }
 
 // NewAPI allocates and returns a new API.
 func NewAPI() *API {
-	return &API{}
+	return &API{defaultParseForm: true, defaultContentType: "application/json"}
 }
 
 func (api *API) requestHandler(resource interface{}) http.HandlerFunc {
 	return func(rw http.ResponseWriter, request *http.Request) {
 
-		if request.ParseForm() != nil {
+		if api.defaultParseForm && request.ParseForm() != nil {
 			rw.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -121,11 +123,11 @@ func (api *API) requestHandler(resource interface{}) http.HandlerFunc {
 		default:
 			// Encode JSON.
 			content, err = json.MarshalIndent(data, "", "  ")
-			if err == nil {
+			if err == nil && api.defaultContentType != "" {
 				if header == nil {
-					header = http.Header{"Content-Type": {"application/json"}}
+					header = http.Header{"Content-Type": {api.defaultContentType}}
 				} else if header.Get("Content-Type") == "" {
-					header.Set("Content-Type", "application/json")
+					header.Set("Content-Type", api.defaultContentType)
 				}
 			}
 		}
@@ -164,6 +166,19 @@ func (api *API) SetMux(mux APIMux) error {
 	api.mux = mux
 	api.muxInitialized = true
 	return nil
+}
+
+// SetDefaultContentType sets the content type response header value
+// which is set when a handler did not set it. You can set the default
+// content type to "" to set no content type in that case.
+func (api *API) SetDefaultContentType(ct string) {
+	api.defaultContentType = ct
+}
+
+// SetDefaultParseForm controls if incoming requests automatically parse
+// form data using request.ParseForm.
+func (api *API) SetDefaultParseForm(defaultParseForm bool) {
+	api.defaultParseForm = defaultParseForm
 }
 
 // AddResource adds a new resource to an API. The API will route

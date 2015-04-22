@@ -30,7 +30,7 @@ func (upload Upload) Post(request *http.Request) (int, interface{}, http.Header)
 		return http.StatusBadRequest, err.Error(), http.Header{"Content-Type": {"text/plain"}}
 	}
 	data := request.MultipartForm.Value["title"]
-	return http.StatusOK, data, nil
+	return http.StatusOK, data, http.Header{"Content-Type": {"application/json; charset=utf-8"}}
 }
 
 func init() {
@@ -52,6 +52,9 @@ func TestBasicGet(t *testing.T) {
 	resp, err := http.Get("http://localhost:3000/items")
 	if err != nil {
 		t.Error(err)
+	}
+	if resp.Header.Get("Content-Type") != "application/json" {
+		t.Error("Content-Type wrong.")
 	}
 	body, _ := ioutil.ReadAll(resp.Body)
 	if string(body) != "{\n  \"items\": [\n    \"item1\",\n    \"item2\"\n  ]\n}" {
@@ -99,7 +102,7 @@ func TestMultipartFormDataPost(t *testing.T) {
 		t.Error(err)
 	}
 
-	if resp.Header.Get("Content-Type") != "application/json" {
+	if resp.Header.Get("Content-Type") != "application/json; charset=utf-8" {
 		t.Error("Content-Type wrong.")
 	}
 
