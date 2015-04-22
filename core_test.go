@@ -7,7 +7,6 @@ import (
 	"mime/multipart"
 	"net/http"
 	"net/url"
-	"os"
 	"testing"
 )
 
@@ -34,7 +33,7 @@ func (upload Upload) Post(request *http.Request) (int, interface{}, http.Header)
 	return http.StatusOK, data, nil
 }
 
-func TestMain(m *testing.M) {
+func init() {
 
 	item := new(Item)
 	upload := new(Upload)
@@ -46,7 +45,6 @@ func TestMain(m *testing.M) {
 
 	go api.Start(3000)
 
-	os.Exit(m.Run())
 }
 
 func TestBasicGet(t *testing.T) {
